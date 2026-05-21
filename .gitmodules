@@ -1,0 +1,3 @@
+[submodule "apps/docs-template"]
+	path = apps/docs-template
+	url = https://github.com/brandondkong/docs.git
