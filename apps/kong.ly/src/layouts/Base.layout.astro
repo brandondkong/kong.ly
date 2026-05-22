@@ -110,8 +110,13 @@ const ogImage = image ?? new URL('/og-default.png', SITE.url).href;
             Skip to main content
         </a>
         <Navbar />
-        <main id="main" class="bg-background relative z-10 pb-16 md:pb-30">
-            <slot />
+        <main
+            id="main"
+            class="bg-background relative z-10 pb-16 md:pb-30"
+        >
+            <div class="mx-auto w-full max-w-480">
+                <slot />
+            </div>
         </main>
         <Footer />
         <Cursor />
