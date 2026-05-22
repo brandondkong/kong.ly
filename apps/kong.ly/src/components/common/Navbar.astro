@@ -11,43 +11,51 @@ const links = [
 
 <nav
     aria-label="Main"
-    class="bg-background border-border relative z-50 flex w-full items-center justify-between border-b px-8 py-9"
+    class="bg-background border-border relative z-50 w-full border-b py-9"
     transition:persist
 >
-    <a
-        id="nav-logo"
-        href="/"
-        class="text-3xl leading-none font-bold tracking-tight uppercase"
-        >kong.ly</a
+    <div
+        class="mx-auto flex w-full max-w-480 items-center justify-between px-8"
     >
-    <button
-        id="menu-toggle"
-        class="relative flex h-11 w-11 cursor-pointer items-center justify-center"
-        aria-label="Toggle menu"
-        aria-expanded="false"
-        aria-controls="menu-overlay"
-    >
-        <div
-            id="icon-dots"
-            class="duration-fast grid h-[18px] w-[18px] grid-cols-2 place-items-center gap-2 transition-opacity"
-            aria-hidden="true"
+        <a
+            id="nav-logo"
+            href="/"
+            class="text-3xl leading-none font-bold tracking-tight uppercase"
+            >kong.ly</a
         >
-            <div class="bg-foreground h-[5px] w-[5px]"></div>
-            <div class="bg-foreground h-[5px] w-[5px]"></div>
-            <div class="bg-foreground h-[5px] w-[5px]"></div>
-            <div class="bg-foreground h-[5px] w-[5px]"></div>
-        </div>
-        <div
-            id="icon-close"
-            class="duration-fast absolute flex h-[18px] w-[18px] items-center justify-center opacity-0 transition-opacity"
-            aria-hidden="true"
+        <button
+            id="menu-toggle"
+            class="relative flex h-11 w-11 cursor-pointer items-center justify-center"
+            aria-label="Toggle menu"
+            aria-expanded="false"
+            aria-controls="menu-overlay"
         >
-            <div class="bg-foreground absolute h-[1.5px] w-[18px] rotate-45">
+            <div
+                id="icon-dots"
+                class="duration-fast grid h-[18px] w-[18px] grid-cols-2 place-items-center gap-2 transition-opacity"
+                aria-hidden="true"
+            >
+                <div class="bg-foreground h-[5px] w-[5px]"></div>
+                <div class="bg-foreground h-[5px] w-[5px]"></div>
+                <div class="bg-foreground h-[5px] w-[5px]"></div>
+                <div class="bg-foreground h-[5px] w-[5px]"></div>
             </div>
-            <div class="bg-foreground absolute h-[1.5px] w-[18px] -rotate-45">
+            <div
+                id="icon-close"
+                class="duration-fast absolute flex h-[18px] w-[18px] items-center justify-center opacity-0 transition-opacity"
+                aria-hidden="true"
+            >
+                <div
+                    class="bg-foreground absolute h-[1.5px] w-[18px] rotate-45"
+                >
+                </div>
+                <div
+                    class="bg-foreground absolute h-[1.5px] w-[18px] -rotate-45"
+                >
+                </div>
             </div>
-        </div>
-    </button>
+        </button>
+    </div>
 </nav>
 
 <div
