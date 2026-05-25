@@ -20,7 +20,7 @@ const excludeFilter =
     excludedIds.length > 0 ? ` && !(_id in $excludedIds)` : '';
 const WORKS_QUERY = includeAll
     ? `*[_type == "project" && defined(slug.current)${excludeFilter}]|order(_createdAt desc){ _id, title, slug, coverImage }`
-    : `*[_type == "project" && defined(slug.current)${excludeFilter}]|order(_createdAt desc)[0...3]{ _id, title, slug, coverImage }`;
+    : `*[_type == "project" && defined(slug.current)${excludeFilter}]|order(_createdAt desc)[0...4]{ _id, title, slug, coverImage }`;
 const works = await sanityClient.fetch<Work[]>(WORKS_QUERY, { excludedIds });
 ---
 
