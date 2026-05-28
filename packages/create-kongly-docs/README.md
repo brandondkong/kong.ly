@@ -33,14 +33,38 @@ Does **not** run `git init` — safe to scaffold inside an existing repository.
 
 ## Releasing
 
-Releases are published automatically by GitHub Actions when a tag matching `create-kongly-docs@v*` is pushed.
+Releases use npm **trusted publishing** (OIDC — no tokens) combined with **staged publishing** (a human approves each version with 2FA before it goes live). GitHub Actions stages a new version when a tag matching `create-kongly-docs@v*` is pushed.
+
+### One-time setup
+
+1. **Claim the package name.** Trusted publishing is configured per existing package, so publish once manually to create it:
+   ```bash
+   cd packages/create-kongly-docs
+   bun run build
+   npm publish --access public --otp=<code>
+   ```
+2. **Add the trusted publisher** at `https://www.npmjs.com/package/create-kongly-docs/access`:
+   - Provider: GitHub Actions
+   - Repository: `brandondkong/kong.ly`
+   - Workflow filename: `release-create-kongly-docs.yml`
+   - Allowed action: **stage publish** only
+3. **Require staged publishing** (2FA approval) on the package so direct publishes are rejected.
+
+### Cutting a release
 
 ```bash
 # 1. Bump the version in packages/create-kongly-docs/package.json
 # 2. Commit the change.
-# 3. Tag and push.
+# 3. Tag and push — the workflow stages the publish via OIDC.
 git tag create-kongly-docs@v0.1.0
 git push origin create-kongly-docs@v0.1.0
 ```
 
-Required GitHub Actions secret: `NPM_TOKEN` (an automation token from npm with publish rights to `create-kongly-docs`).
+The staged version waits in the registry until you approve it:
+
+```bash
+npm stage ls create-kongly-docs       # see staged versions
+npm stage publish create-kongly-docs  # approve & release (prompts for 2FA)
+```
+
+You can also approve from the package page on npmjs.com. No GitHub Actions secrets are required.
