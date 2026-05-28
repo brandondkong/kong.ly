@@ -1,0 +1,48 @@
+{
+    "name": "create-kongly-docs",
+    "version": "0.1.0",
+    "description": "Scaffold a new documentation site from the kong.ly docs template.",
+    "type": "module",
+    "bin": {
+        "create-kongly-docs": "./dist/index.js"
+    },
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "bun build src/index.ts --target=node --outdir=dist --format=esm --external '*'",
+        "typecheck": "tsc --noEmit",
+        "prepublishOnly": "bun run build"
+    },
+    "keywords": [
+        "create",
+        "create-app",
+        "scaffold",
+        "docs",
+        "astro",
+        "template",
+        "kong.ly"
+    ],
+    "license": "MIT",
+    "author": "Brandon Kong",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/brandondkong/kong.ly.git",
+        "directory": "packages/create-kongly-docs"
+    },
+    "homepage": "https://github.com/brandondkong/kong.ly/tree/main/packages/create-kongly-docs",
+    "bugs": "https://github.com/brandondkong/kong.ly/issues",
+    "dependencies": {
+        "@clack/prompts": "^0.8.2",
+        "giget": "^1.2.3",
+        "picocolors": "^1.1.1"
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.0",
+        "typescript": "^5.7.3"
+    },
+    "engines": {
+        "node": ">=20"
+    }
+}
