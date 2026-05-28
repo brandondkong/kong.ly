@@ -1,6 +1,6 @@
 {
     "name": "create-kongly-docs",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Scaffold a new documentation site from the kong.ly docs template.",
     "type": "module",
     "bin": {
