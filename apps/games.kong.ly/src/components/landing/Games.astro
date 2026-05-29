@@ -40,13 +40,13 @@ const statusStyles: Record<Game['status'], string> = {
                             {...(game.href ? { href: game.href } : {})}
                             class="border-border hover:bg-surface flex h-full flex-col gap-4 rounded-xl border p-6 transition-colors"
                         >
-                            <div class="bg-surface flex aspect-[4/3] items-center justify-center overflow-hidden rounded-lg">
+                            <div class="bg-surface flex aspect-video items-center justify-center overflow-hidden rounded-lg">
                                 {game.image ? (
                                     <img
                                         src={game.image}
                                         alt={`${game.title} artwork`}
-                                        width={1600}
-                                        height={1200}
+                                        width={1920}
+                                        height={1080}
                                         loading="lazy"
                                         class="h-full w-full object-cover transition-transform duration-(--duration-normal) group-hover:scale-105"
                                     />
