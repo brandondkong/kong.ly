@@ -1,0 +1,79 @@
+---
+import Section from '../common/Section.astro';
+import Text from '../common/Text.astro';
+import Reveal from '../common/Reveal.astro';
+import { CAREERS_EMAIL } from '../../lib/constants';
+
+interface Role {
+    title: string;
+    type: string;
+    location: string;
+}
+
+const roles: Role[] = [
+    {
+        title: '3D Artist',
+        type: 'Contract',
+        location: 'Remote',
+    },
+    {
+        title: 'Sound Designer',
+        type: 'Contract',
+        location: 'Remote',
+    },
+];
+---
+
+<Section title="Careers" id="careers">
+    <div class="gap-section-gap mt-8 flex flex-col md:flex-row">
+        <div class="flex-1">
+            <Text variant="body-lg" class="text-muted max-w-2xl">
+                We&apos;re a small team that values craft, curiosity, and
+                kindness. If you want to help shape games from the ground up —
+                with real ownership and a short distance between idea and player
+                — we&apos;d love to hear from you.
+            </Text>
+            <Text variant="body" class="text-muted mt-4 max-w-2xl">
+                Don&apos;t see your role? Reach out anyway at{' '}
+                <a
+                    href={`mailto:${CAREERS_EMAIL}`}
+                    class="text-foreground underline decoration-1 underline-offset-4"
+                >
+                    {CAREERS_EMAIL}
+                </a>
+                .
+            </Text>
+        </div>
+    </div>
+
+    <div class="mt-8 flex flex-col gap-px">
+        {
+            roles.map((role) => (
+                <Reveal class="group">
+                    <a
+                        href={`mailto:${CAREERS_EMAIL}?subject=${encodeURIComponent(`Application: ${role.title}`)}`}
+                        class="border-border hover:bg-surface -mx-4 flex flex-col gap-2 border-b px-4 py-6 transition-colors sm:flex-row sm:items-baseline sm:justify-between"
+                    >
+                        <div class="flex flex-col gap-1">
+                            <Text
+                                variant="heading"
+                                class="group-hover:text-muted transition-colors"
+                            >
+                                {role.title}
+                            </Text>
+                            <Text variant="body" class="text-muted">
+                                {role.type} · {role.location}
+                            </Text>
+                        </div>
+                        <Text
+                            variant="body-sm"
+                            class="text-muted group-hover:text-foreground shrink-0"
+                        >
+                            Apply →
+                        </Text>
+                    </a>
+                </Reveal>
+            ))
+        }
+    </div>
+</Section>

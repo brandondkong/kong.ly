@@ -1,0 +1,39 @@
+---
+import Section from '../common/Section.astro';
+import Text from '../common/Text.astro';
+
+interface Stat {
+    label: string;
+    value: string;
+}
+
+const stats: Stat[] = [
+    { label: 'Founded', value: '2026' },
+    { label: 'Based in', value: 'Chicago' },
+    { label: 'Focus', value: 'Indie games' },
+];
+---
+
+<Section title="The Studio" id="about">
+    <div class="gap-section-gap mt-8 flex flex-col md:flex-row">
+        <div class="flex-1">
+            <Text variant="body-lg" class="text-muted max-w-2xl">
+                Kong&apos;s Games is an independent studio building games that
+                feel personal. We believe the best games come from small teams
+                with strong opinions. We keep our players close when we think about games.
+            </Text>
+        </div>
+        <div class="flex flex-col gap-6 md:w-80">
+            {
+                stats.map((stat) => (
+                    <div class="flex flex-col gap-1">
+                        <Text variant="label" class="text-muted">
+                            {stat.label}
+                        </Text>
+                        <Text variant="body">{stat.value}</Text>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</Section>

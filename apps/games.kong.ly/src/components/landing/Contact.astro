@@ -1,0 +1,30 @@
+---
+import Section from '../common/Section.astro';
+import Text from '../common/Text.astro';
+import Button from '../common/Button.astro';
+import { CONTACT_EMAIL } from '../../lib/constants';
+---
+
+<Section title="Contact" id="contact">
+    <div
+        class="gap-section-gap mt-8 flex flex-col items-start justify-between md:flex-row md:items-end"
+    >
+        <div class="flex-1">
+            <Text variant="body-lg" class="text-muted max-w-2xl">
+                Press, partnerships, or just want to say hello? We&apos;re
+                always happy to talk games.
+            </Text>
+            <Text variant="title" as="p" class="mt-6">
+                <a
+                    href={`mailto:${CONTACT_EMAIL}`}
+                    class="hover:text-muted transition-colors"
+                >
+                    {CONTACT_EMAIL}
+                </a>
+            </Text>
+        </div>
+        <Button href={`mailto:${CONTACT_EMAIL}`} class="shrink-0">
+            Get in touch
+        </Button>
+    </div>
+</Section>

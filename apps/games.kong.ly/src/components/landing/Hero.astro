@@ -1,0 +1,31 @@
+---
+import Text from '../common/Text.astro';
+import Section from '../common/Section.astro';
+import Reveal from '../common/Reveal.astro';
+import Button from '../common/Button.astro';
+---
+
+<Section hideBorder paddingTop="hero" class="gap-section-gap flex flex-col">
+    <div class="gap-element-gap flex flex-col items-start">
+        <Reveal>
+            <Text variant="label" class="text-muted">
+                Independent Game Studio
+            </Text>
+        </Reveal>
+        <Text variant="display" reveal aria-label="Kong's Games">
+            Kong&apos;s<br />Games
+        </Text>
+    </div>
+    <Reveal
+        distance="256px"
+        class="gap-content-gap flex flex-col items-start justify-between lg:flex-row lg:items-end"
+    >
+        <Text variant="body-lg" class="text-muted max-w-xl">
+            We make small, beautiful games that resonate with our players. 
+        </Text>
+        <div class="flex shrink-0 gap-3">
+            <Button href="/#games" variant="inverted">View our games</Button>
+            <Button href="/#careers">We&apos;re hiring</Button>
+        </div>
+    </Reveal>
+</Section>

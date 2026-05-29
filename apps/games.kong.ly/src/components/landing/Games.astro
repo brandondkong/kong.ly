@@ -1,0 +1,69 @@
+---
+import Section from '../common/Section.astro';
+import Text from '../common/Text.astro';
+import Reveal from '../common/Reveal.astro';
+
+interface Game {
+    title: string;
+    description: string;
+    status: 'In Development' | 'Coming Soon' | 'Released';
+    year: string;
+    href?: string;
+}
+
+const games: Game[] = [
+    {
+        title: 'Residential',
+        description:
+            'A cozy sandbox tycoon where you build your dream city.',
+        status: 'In Development',
+        year: '2026',
+    },
+];
+
+const statusStyles: Record<Game['status'], string> = {
+    'In Development': 'bg-foreground text-background',
+    'Coming Soon': 'border border-border text-muted',
+    Released: 'border border-border text-foreground',
+};
+---
+
+<Section title="Games" id="games">
+    <div class="gap-content-gap mt-8 grid grid-cols-1 md:grid-cols-2">
+        {
+            games.map((game) => {
+                const Tag = game.href ? 'a' : 'div';
+                return (
+                    <Reveal class="group">
+                        <Tag
+                            {...(game.href ? { href: game.href } : {})}
+                            class="border-border hover:bg-surface flex h-full flex-col gap-4 rounded-xl border p-6 transition-colors"
+                        >
+                            <div class="bg-surface flex aspect-video items-center justify-center overflow-hidden rounded-lg">
+                                <Text variant="label" class="text-muted">
+                                    Artwork coming soon
+                                </Text>
+                            </div>
+                            <div class="flex items-center justify-between gap-4">
+                                <Text variant="heading">{game.title}</Text>
+                                <Text variant="body-sm" class="text-muted">
+                                    {game.year}
+                                </Text>
+                            </div>
+                            <Text variant="body" class="text-muted">
+                                {game.description}
+                            </Text>
+                            <div class="mt-auto pt-2">
+                                <span
+                                    class={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${statusStyles[game.status]}`}
+                                >
+                                    {game.status}
+                                </span>
+                            </div>
+                        </Tag>
+                    </Reveal>
+                );
+            })
+        }
+    </div>
+</Section>
