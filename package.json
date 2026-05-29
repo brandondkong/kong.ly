@@ -5,6 +5,10 @@
     "scripts": {
         "dev": "bun run --filter kong.ly dev",
         "build": "bun run --filter kong.ly build",
+        "docs:dev": "bun run --filter docs-template dev",
+        "docs:build": "bun run --filter docs-template build",
+        "games:dev": "bun run --filter games.kong.ly dev",
+        "games:build": "bun run --filter games.kong.ly build",
         "lint": "bun run --filter '*' lint",
         "format": "bun run --filter '*' format",
         "format:check": "bun run --filter '*' format:check"
