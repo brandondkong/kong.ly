@@ -1,0 +1,100 @@
+---
+import Text from './Text.astro';
+import SocialLink from './SocialLink.astro';
+import { GITHUB_LINK, STUDIO_LINK, CONTACT_EMAIL } from '../../lib/constants';
+
+interface FooterLink {
+    label: string;
+    href: string;
+    external?: boolean;
+}
+
+interface FooterColumn {
+    title: string;
+    links: FooterLink[];
+}
+
+const footerColumns: FooterColumn[] = [
+    {
+        title: 'Studio',
+        links: [
+            { label: 'Games', href: '/#games' },
+            { label: 'About', href: '/#about' },
+            { label: 'Careers', href: '/#careers' },
+            { label: 'Contact', href: '/#contact' },
+        ],
+    },
+    {
+        title: 'Connect',
+        links: [
+            { label: 'GitHub', href: GITHUB_LINK, external: true },
+            { label: 'Email', href: `mailto:${CONTACT_EMAIL}`, external: true },
+            { label: 'kong.ly', href: STUDIO_LINK, external: true },
+        ],
+    },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-footer-background text-footer-foreground">
+    <div class="px-section-x sm:px-section-x-sm mx-auto max-w-480">
+        <div
+            class="gap-section-gap pt-footer-top pb-footer-bottom-sm flex flex-col justify-between md:flex-row"
+        >
+            <div class="flex flex-col justify-between gap-12">
+                <a
+                    href="/"
+                    class="inline-flex items-center gap-2"
+                    aria-label="Home"
+                >
+                    <Text variant="heading" class="text-xl font-semibold">
+                        Kong&apos;s Games
+                    </Text>
+                </a>
+                <Text variant="normal" class="text-neutral-400">
+                    Small, strange, and heartfelt games.
+                </Text>
+            </div>
+
+            <div class="gap-section-gap flex flex-row">
+                {
+                    footerColumns.map((column) => (
+                        <div class="flex flex-col gap-4">
+                            <Text variant="label" class="text-neutral-500">
+                                {column.title}
+                            </Text>
+                            <ul class="flex flex-col gap-3">
+                                {column.links.map((link) => (
+                                    <li>
+                                        <a
+                                            href={link.href}
+                                            class="hover:text-footer-foreground text-sm text-neutral-300 transition-colors"
+                                            {...(link.external
+                                                ? {
+                                                      target: '_blank',
+                                                      rel: 'noopener noreferrer',
+                                                  }
+                                                : {})}
+                                        >
+                                            {link.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+
+        <div
+            class="border-footer-surface pb-footer-bottom flex flex-col items-center justify-between gap-4 border-t pt-8 md:flex-row"
+        >
+            <Text variant="normal" class="text-neutral-400">
+                © {year} Kong&apos;s Games. All rights reserved.
+            </Text>
+            <SocialLink text="GitHub" icon="brands/github" href={GITHUB_LINK} />
+        </div>
+    </div>
+</footer>

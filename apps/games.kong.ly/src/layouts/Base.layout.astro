@@ -1,0 +1,115 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Font from 'astro/components/Font.astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
+
+import '../styles/global.css';
+import Navbar from '../components/common/Navbar.astro';
+import Footer from '../components/common/Footer.astro';
+import Cursor from '../components/common/Cursor.astro';
+import JsonLd from '../components/common/JsonLd.astro';
+import { SITE, GITHUB_LINK } from '../lib/constants';
+
+interface Props {
+    title?: string;
+    description?: string;
+    image?: string;
+    type?: 'website' | 'article';
+}
+
+const {
+    title,
+    description = SITE.description,
+    image,
+    type = 'website',
+} = Astro.props;
+
+const pageTitle = title ? `${title} — ${SITE.name}` : SITE.title;
+const canonicalUrl = new URL(Astro.url.pathname, SITE.url).href;
+const ogImage = image ?? new URL('/og-default.png', SITE.url).href;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>{pageTitle}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        <meta property="og:type" content={type} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:locale" content={SITE.locale} />
+        <meta property="og:site_name" content={SITE.name} />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImage} />
+
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+        />
+        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="theme-color" content="#ffffff" />
+        <Font cssVariable="--font-inter" />
+
+        <JsonLd
+            data={{
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                name: "Kong's Games",
+                url: SITE.url,
+                description: SITE.description,
+                sameAs: [GITHUB_LINK],
+            }}
+        />
+        <ClientRouter />
+        <noscript>
+            <style>
+                [data-reveal] {
+                    visibility: visible;
+                }
+                [data-reveal-fade] {
+                    opacity: 1;
+                    translate: none;
+                }
+            </style>
+        </noscript>
+    </head>
+    <body>
+        <a
+            href="#main"
+            class="focus:bg-foreground focus:text-background sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:px-4 focus:py-2 focus:text-sm focus:font-medium"
+        >
+            Skip to main content
+        </a>
+        <Navbar />
+        <main id="main" class="bg-background relative z-10 pb-16 md:pb-30">
+            <div class="mx-auto w-full max-w-480">
+                <slot />
+            </div>
+        </main>
+        <Footer />
+        <Cursor />
+        <SpeedInsights />
+
+    </body>
+</html>

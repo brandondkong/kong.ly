@@ -1,0 +1,79 @@
+---
+import Button from './Button.astro';
+import Reveal from './Reveal.astro';
+import Text from './Text.astro';
+
+type PaddingTop = 'hero' | 'section' | 'none';
+type PaddingBottom = 'section' | 'sm' | 'none';
+
+interface Props {
+    id?: string;
+    class?: string;
+    hideBorder?: boolean;
+    title?: string;
+    buttonText?: string;
+    href?: string;
+    buttonExternal?: boolean;
+    paddingTop?: PaddingTop;
+    paddingBottom?: PaddingBottom;
+}
+
+import { twMerge } from 'tailwind-merge';
+
+const {
+    id,
+    class: className,
+    href,
+    hideBorder = false,
+    title,
+    buttonText,
+    buttonExternal = false,
+    paddingTop = 'section',
+    paddingBottom = 'section',
+    ...rest
+} = Astro.props;
+
+const buttonAttrs = buttonExternal
+    ? { target: '_blank', rel: 'noopener noreferrer' }
+    : {};
+
+const paddingTopClass: Record<PaddingTop, string> = {
+    hero: 'pt-hero-top',
+    section: 'pt-section-top',
+    none: '',
+};
+
+const paddingBottomClass: Record<PaddingBottom, string> = {
+    section: 'pb-section-bottom',
+    sm: 'pb-section-top',
+    none: '',
+};
+---
+
+<section
+    id={id}
+    class={twMerge(
+        'px-section-x sm:px-section-x-sm [clip-path:inset(0)]',
+        paddingTopClass[paddingTop],
+        paddingBottomClass[paddingBottom],
+        !hideBorder && 'border-t border-border',
+        className,
+    )}
+    {...rest}
+>
+    {
+        title && (
+            <Reveal distance="64px">
+                <div class="flex flex-row items-center justify-between">
+                    <Text variant="heading">{title}</Text>
+                    {buttonText && (
+                        <Button href={href} {...buttonAttrs}>
+                            {buttonText}
+                        </Button>
+                    )}
+                </div>
+            </Reveal>
+        )
+    }
+    <slot />
+</section>

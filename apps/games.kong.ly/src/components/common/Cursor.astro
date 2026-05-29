@@ -1,0 +1,184 @@
+<div id="cursor" aria-hidden="true" transition:persist>
+    <span id="cursor-text"></span>
+</div>
+
+<style is:global>
+    @media (pointer: fine) {
+        body {
+            cursor: none;
+        }
+        body * {
+            cursor: inherit;
+        }
+    }
+
+    #cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.4);
+        backdrop-filter: invert(1);
+        pointer-events: none;
+        z-index: 9999;
+        transition:
+            width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+            height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+            border-radius 0.3s ease,
+            backdrop-filter 0.3s ease,
+            background-color 0.3s ease;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    @supports (backdrop-filter: invert(1)) or
+        (-webkit-backdrop-filter: invert(1)) {
+        #cursor {
+            background-color: transparent;
+        }
+    }
+
+    @media (pointer: fine) {
+        #cursor {
+            display: flex;
+        }
+    }
+
+    #cursor.hovering {
+        width: 68px;
+        height: 68px;
+    }
+
+    #cursor.has-text {
+        width: var(--cursor-w, 28px);
+        height: var(--cursor-h, 28px);
+        backdrop-filter: none;
+        background-color: var(--color-foreground);
+        border-radius: 100px;
+    }
+
+    #cursor-text {
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--color-background);
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+    }
+
+    #cursor.has-text #cursor-text {
+        opacity: 1;
+        transition: opacity 0.2s 0.1s ease;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        body {
+            cursor: auto;
+        }
+        body * {
+            cursor: auto;
+        }
+        #cursor {
+            display: none !important;
+        }
+    }
+</style>
+
+<script>
+    if (window.matchMedia('(pointer: fine)').matches) {
+        const cursor = document.getElementById('cursor')!;
+        const cursorTextEl = document.getElementById('cursor-text')!;
+        const ease = 0.5;
+
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        let hasMoved = false;
+
+        let hasText = false;
+
+        const paddingX = 32;
+        const paddingY = 16;
+
+        function updateCursorSize(text: string) {
+            const size = measureText(text);
+            cursor.style.setProperty('--cursor-w', `${size.width}px`);
+            cursor.style.setProperty('--cursor-h', `${size.height}px`);
+        }
+
+        window.__updateCursorSize = updateCursorSize;
+
+        function measureText(text: string): { width: number; height: number } {
+            const measurer = document.createElement('span');
+            measurer.style.cssText = `
+			position: fixed; visibility: hidden; white-space: nowrap;
+			font-size: 18px; font-weight: 500;
+		`;
+            measurer.textContent = text;
+            document.body.appendChild(measurer);
+            const rect = measurer.getBoundingClientRect();
+            document.body.removeChild(measurer);
+            return {
+                width: rect.width + paddingX * 2,
+                height: rect.height + paddingY * 2,
+            };
+        }
+
+        cursor.style.opacity = '0';
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            if (!hasMoved) {
+                cursorX = mouseX;
+                cursorY = mouseY;
+                cursor.style.opacity = '1';
+                hasMoved = true;
+            }
+
+            const target = e.target as HTMLElement;
+            const isHovering = target.closest(
+                "a, button, [role='button'], input, textarea",
+            );
+            const cursorTarget =
+                target.closest<HTMLElement>('[data-cursor-text]');
+
+            cursor.classList.toggle('hovering', !!isHovering && !cursorTarget);
+
+            if (cursorTarget) {
+                if (!hasText) {
+                    const text = cursorTarget.dataset.cursorText!;
+                    cursorTextEl.textContent = text;
+                    updateCursorSize(text);
+
+                    cursor.classList.add('has-text');
+                    hasText = true;
+                }
+            } else if (hasText) {
+                cursor.classList.remove('has-text');
+                cursor.style.removeProperty('--cursor-w');
+                cursor.style.removeProperty('--cursor-h');
+                cursorTextEl.textContent = '';
+                hasText = false;
+            }
+        });
+
+        function animate() {
+            cursorX += (mouseX - cursorX) * ease;
+            cursorY += (mouseY - cursorY) * ease;
+
+            const rect = cursor.getBoundingClientRect();
+            cursor.style.left = `${cursorX - rect.width / 2}px`;
+            cursor.style.top = `${cursorY - rect.height / 2}px`;
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    }
+</script>

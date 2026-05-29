@@ -1,0 +1,306 @@
+@import 'tailwindcss';
+
+@theme inline {
+    /* Registers Astro's injected font variables into the Tailwind theme */
+    --font-inter: var(--font-inter);
+
+    --color-footer-foreground: white;
+    --color-footer-background: black;
+    --color-footer-surface: #262626;
+
+    --color-foreground: black;
+    --color-background: white;
+    --color-muted: #525252;
+    --color-subtle: #595959;
+    --color-border: #f5f5f5;
+    --color-surface: #f5f5f5;
+    --color-overlay: rgba(0, 0, 0, 0.8);
+
+    --text-display-sm: 72px;
+    --text-display-md: 120px;
+    --text-display-lg: 168px;
+    --text-title: 110px;
+
+    --spacing-section-x: 24px;
+    --spacing-section-x-sm: 80px;
+    --spacing-hero-top: 56px;
+    --spacing-section-top: 32px;
+    --spacing-section-bottom: 80px;
+    --spacing-hero-gap: 72px;
+    --spacing-section-gap: 48px;
+    --spacing-content-gap: 24px;
+    --spacing-content-gap-sm: 8px;
+    --spacing-element-gap: 16px;
+    --spacing-tight-gap: 8px;
+    --spacing-footer-top: 144px;
+    --spacing-footer-bottom: 16px;
+    --spacing-footer-bottom-sm: 64px;
+
+    --duration-fast: 200ms;
+    --duration-normal: 500ms;
+    --ease-default: ease;
+    --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --animate-ping-slow: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping-slow {
+    75%,
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+[data-reveal-fade] {
+    opacity: 0;
+    translate: 0 var(--reveal-distance, 24px);
+    transition:
+        opacity var(--reveal-duration, 0.8s) var(--ease-reveal)
+            var(--reveal-delay, 0s),
+        translate var(--reveal-duration, 0.8s) var(--ease-reveal)
+            var(--reveal-delay, 0s);
+}
+
+[data-reveal-fade].revealed {
+    opacity: 1;
+    translate: none;
+}
+
+[data-reveal] {
+    visibility: hidden;
+}
+
+@keyframes reveal-up {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+body {
+    font-family: var(--font-inter);
+}
+
+@media (max-width: 767px) {
+    main > section + section {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 500px;
+    }
+}
+
+a:focus-visible,
+button:focus-visible,
+[role='button']:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 2px;
+}
+
+footer a:focus-visible,
+footer button:focus-visible {
+    outline-color: var(--color-footer-foreground);
+}
+
+.prose {
+    font-family: 'Lora', serif;
+    font-size: 1.125rem;
+    line-height: 1.85;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+    font-family: var(--font-inter), sans-serif;
+}
+
+.prose h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+}
+
+.prose h2 {
+    font-size: 2.25rem;
+    font-weight: 600;
+    margin-top: 3rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+}
+
+.prose h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.prose h4 {
+    font-size: 1.375rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+}
+
+.prose h5 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+}
+
+.prose h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+
+    color: var(--color-muted);
+}
+
+.prose .heading-anchor {
+    position: relative;
+}
+
+.prose .heading-anchor .anchor-link {
+    opacity: 0;
+    margin-left: 0.35em;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+}
+
+.prose .heading-anchor:hover .anchor-link {
+    opacity: 1;
+}
+
+.prose .heading-anchor .anchor-link:hover {
+    color: var(--color-foreground);
+}
+
+.prose p {
+    margin-bottom: 1.25rem;
+    line-height: 1.4;
+    color: var(--color-muted);
+}
+
+.prose a {
+    color: var(--color-foreground);
+    text-decoration: underline 1.5px;
+    text-underline-offset: 3px;
+}
+
+.prose a:hover {
+    color: var(--color-muted);
+}
+
+.prose a:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 2px;
+}
+
+.prose ul,
+.prose ol {
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+    color: var(--color-muted);
+}
+
+.prose ul {
+    list-style-type: disc;
+}
+
+.prose ol {
+    list-style-type: decimal;
+}
+
+.prose li {
+    margin-bottom: 0.5rem;
+    line-height: 1.75;
+}
+
+.prose blockquote {
+    border-left: 2px solid var(--color-border);
+    padding-left: 1.25rem;
+    margin-bottom: 1.25rem;
+    color: var(--color-subtle);
+    font-style: italic;
+}
+
+.prose code {
+    background-color: var(--color-surface);
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.prose pre {
+    background-color: var(--color-surface);
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.25rem;
+}
+
+.prose pre code {
+    background: none;
+    padding: 0;
+}
+.prose .code-block pre {
+    background-color: var(--color-surface) !important;
+    font-size: 0.875rem;
+    line-height: 1.7;
+}
+
+.prose img {
+    width: 100%;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.prose hr {
+    border-color: var(--color-border);
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-reveal-fade] {
+        transition: none;
+        opacity: 1;
+        translate: none;
+    }
+
+    [data-reveal] {
+        visibility: visible;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
