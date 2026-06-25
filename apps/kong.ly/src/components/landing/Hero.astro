@@ -1,11 +1,24 @@
 ---
 import { Image } from 'astro:assets';
+import { sanityClient } from 'sanity:client';
+import type { SanityImageRef } from '@kong/sanity';
 import Text from '../common/Text.astro';
 import SocialLink from '../common/SocialLink.astro';
 import Portrait from '../../assets/imgs/portrait.png';
 import Section from '../common/Section.astro';
 import { GITHUB_LINK } from '../../lib/constants';
+import { urlFor } from '../../lib/sanity';
 import Reveal from '../common/Reveal.astro';
+
+const profile = await sanityClient.fetch<{ avatar?: SanityImageRef } | null>(
+    `*[_type == "linksPage"][0]{ avatar }`,
+);
+const avatarUrl = profile?.avatar
+    ? urlFor(profile.avatar).width(336).height(336).url()
+    : null;
+
+const avatarClass =
+    'aspect-square h-26 w-26 rounded-full object-cover md:h-auto md:w-26 xl:w-42';
 ---
 
 <Section hideBorder paddingTop="hero" class="gap-section-gap flex flex-col">
@@ -15,14 +28,27 @@ import Reveal from '../common/Reveal.astro';
         <Text variant="display" reveal aria-label="Brandon Kong">
             Brandon<br />Kong
         </Text>
-        <Image
-            src={Portrait}
-            alt="Portrait of Brandon Kong"
-            class="h-26 w-26 rounded-full md:h-auto md:w-26 xl:w-42"
-            width={336}
-            height={336}
-            loading="eager"
-        />
+        {
+            avatarUrl ? (
+                <Image
+                    src={avatarUrl}
+                    alt="Portrait of Brandon Kong"
+                    class={avatarClass}
+                    width={336}
+                    height={336}
+                    loading="eager"
+                />
+            ) : (
+                <Image
+                    src={Portrait}
+                    alt="Portrait of Brandon Kong"
+                    class={avatarClass}
+                    width={336}
+                    height={336}
+                    loading="eager"
+                />
+            )
+        }
     </div>
     <Reveal
         distance="256px"
