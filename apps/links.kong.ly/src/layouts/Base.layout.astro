@@ -32,6 +32,11 @@ const pageTitle = title ? `${title} — ${SITE.name}` : SITE.title;
 const canonicalUrl = new URL(Astro.url.pathname, SITE.url).href;
 const ogImage = image ?? new URL('/og-default.png', SITE.url).href;
 const year = new Date().getFullYear();
+
+// Umami analytics — only injected when a website id is configured.
+const umamiWebsiteId = import.meta.env.UMAMI_WEBSITE_ID;
+const umamiSrc =
+    import.meta.env.UMAMI_SRC ?? 'https://cloud.umami.is/script.js';
 ---
 
 <!doctype html>
@@ -75,6 +80,17 @@ const year = new Date().getFullYear();
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#ffffff" />
         <Font cssVariable="--font-inter" />
+
+        {
+            umamiWebsiteId && (
+                <script
+                    defer
+                    src={umamiSrc}
+                    data-website-id={umamiWebsiteId}
+                    is:inline
+                />
+            )
+        }
 
         <JsonLd
             data={{
