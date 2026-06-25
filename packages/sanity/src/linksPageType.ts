@@ -24,6 +24,7 @@ export interface FeaturedLink {
 export interface LinksPage extends SanityDocument {
     name: string;
     tagline?: string;
+    flags?: string[];
     avatar?: SanityImageRef;
     socials?: ProfileSocial[];
     links?: ProfileLink[];
@@ -52,6 +53,23 @@ export const linksPageType = defineType({
             type: 'text',
             rows: 2,
             validation: (rule) => rule.max(160),
+        }),
+        defineField({
+            name: 'flags',
+            title: 'Heritage flags',
+            description:
+                'Country flags shown next to the name. Use 2-letter ISO codes, lowercase (e.g. cn, pk). Country names are derived automatically.',
+            type: 'array',
+            of: [{ type: 'string' }],
+            validation: (rule) =>
+                rule.unique().max(5).custom((codes?: string[]) => {
+                    const invalid = (codes ?? []).filter(
+                        (code) => !/^[a-z]{2}$/.test(code),
+                    );
+                    return invalid.length
+                        ? `Use 2-letter lowercase ISO codes (invalid: ${invalid.join(', ')})`
+                        : true;
+                }),
         }),
         defineField({
             name: 'avatar',
