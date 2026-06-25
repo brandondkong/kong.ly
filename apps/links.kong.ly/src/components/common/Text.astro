@@ -1,0 +1,133 @@
+---
+type Variant = keyof typeof variantConfig;
+
+interface Props {
+    variant: Variant;
+    as?: string;
+    class?: string;
+    reveal?: boolean;
+}
+
+import { twMerge } from 'tailwind-merge';
+
+const {
+    variant,
+    as,
+    class: className,
+    reveal = false,
+    ...rest
+} = Astro.props as Props;
+
+interface VariantData {
+    tag: string;
+    classes: string;
+}
+
+const variantConfig = {
+    display: {
+        tag: 'h1',
+        classes:
+            'font-semibold uppercase text-display-sm md:text-display-md lg:text-display-lg leading-none -tracking-[7.5%] break-all',
+    },
+    title: {
+        tag: 'h2',
+        classes:
+            'font-semibold text-4xl md:text-6xl xl:text-title leading-none -tracking-[5%]',
+    },
+    'title-sm': {
+        tag: 'h2',
+        classes:
+            'font-semibold text-4xl md:text-6xl leading-none -tracking-[5%]',
+    },
+    'body-xl': {
+        tag: 'p',
+        classes:
+            'text-4xl lg:text-5xl leading-12 lg:leading-14 font-normal md:font-medium tracking-tight',
+    },
+    heading: {
+        tag: 'h2',
+        classes: 'text-2xl font-medium tracking-tight',
+    },
+    'body-lg': {
+        tag: 'span',
+        classes:
+            'text-xl sm:text-3xl lg:text-4xl leading-7 sm:leading-8 lg:leading-12 font-normal md:font-medium tracking-tighter',
+    },
+    body: {
+        tag: 'p',
+        classes: 'text-2xl font-medium tracking-tighter',
+    },
+    'body-sm': {
+        tag: 'p',
+        classes: 'text-xl font-medium tracking-tighter',
+    },
+    label: {
+        tag: 'span',
+        classes: 'text-sm font-normal tracking-tight',
+    },
+    overline: {
+        tag: 'span',
+        classes: 'text-base font-light tracking-normal uppercase text-subtle',
+    },
+    link: {
+        tag: 'p',
+        classes: 'text-sm md:text-base -tracking-[0.04em]',
+    },
+    normal: {
+        tag: 'p',
+        classes: 'text-sm md:text-base',
+    },
+};
+
+const config = variantConfig[variant];
+const Tag = (as || config.tag) as keyof HTMLElementTagNameMap;
+---
+
+<Tag
+    {...rest}
+    class={twMerge(config.classes, className)}
+    data-reveal={reveal || undefined}
+>
+    <slot />
+</Tag>
+
+<script is:inline>
+    function initReveal() {
+        document.querySelectorAll('[data-reveal]').forEach(function (el) {
+            var lines = [[]];
+
+            el.childNodes.forEach(function (node) {
+                if (node.nodeType === 1 && node.tagName === 'BR') {
+                    lines.push([]);
+                } else {
+                    lines[lines.length - 1].push(node);
+                }
+            });
+
+            el.innerHTML = '';
+
+            lines.forEach(function (lineNodes, i) {
+                var clip = document.createElement('span');
+                clip.style.display = 'block';
+                clip.style.clipPath = 'inset(0 -0.1em 0 0)';
+
+                var inner = document.createElement('span');
+                inner.style.display = 'block';
+                inner.style.animation =
+                    'reveal-up 2s cubic-bezier(0.16, 1, 0.3, 1) both';
+
+                lineNodes.forEach(function (node) {
+                    inner.appendChild(node);
+                });
+                clip.appendChild(inner);
+                el.appendChild(clip);
+            });
+
+            el.removeAttribute('data-reveal');
+            el.style.visibility = 'visible';
+        });
+    }
+
+    initReveal();
+    document.addEventListener('astro:page-load', initReveal);
+</script>

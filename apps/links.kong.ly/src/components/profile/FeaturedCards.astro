@@ -1,0 +1,61 @@
+---
+import { Icon } from 'astro-icon/components';
+import Reveal from '../common/Reveal.astro';
+import Text from '../common/Text.astro';
+
+export interface FeaturedItem {
+    title: string;
+    description?: string;
+    url: string;
+    imageUrl: string;
+}
+
+interface Props {
+    items: FeaturedItem[];
+}
+
+const { items } = Astro.props;
+---
+
+{
+    items.length > 0 && (
+        <Reveal class="gap-content-gap flex flex-col">
+            {items.map((item) => (
+                <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group border-border hover:bg-surface flex flex-col gap-4 border p-4 transition-colors"
+                >
+                    <div class="bg-surface aspect-video overflow-hidden">
+                        <img
+                            src={item.imageUrl}
+                            alt={item.title}
+                            width="800"
+                            height="450"
+                            loading="lazy"
+                            class="h-full w-full object-cover transition-transform duration-(--duration-normal) group-hover:scale-105"
+                        />
+                    </div>
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex flex-col gap-1">
+                            <Text variant="heading">{item.title}</Text>
+                            {item.description && (
+                                <Text variant="normal" class="text-muted">
+                                    {item.description}
+                                </Text>
+                            )}
+                        </div>
+                        <Icon
+                            name="arrow-up-right"
+                            size="20"
+                            class="text-muted group-hover:text-foreground mt-1 shrink-0 transition-colors"
+                            aria-hidden="true"
+                        />
+                        <span class="sr-only">(opens in new tab)</span>
+                    </div>
+                </a>
+            ))}
+        </Reveal>
+    )
+}

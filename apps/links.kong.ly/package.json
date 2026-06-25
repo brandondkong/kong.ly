@@ -1,0 +1,43 @@
+{
+    "name": "links.kong.ly",
+    "type": "module",
+    "version": "0.0.1",
+    "private": true,
+    "engines": {
+        "node": "24.x"
+    },
+    "scripts": {
+        "dev": "astro dev",
+        "build": "astro build",
+        "preview": "astro preview",
+        "astro": "astro",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
+    },
+    "dependencies": {
+        "@astrojs/check": "^0.9.8",
+        "@astrojs/sitemap": "^3.7.2",
+        "@astrojs/vercel": "^10.0.4",
+        "@kong/sanity": "workspace:*",
+        "@sanity/astro": "^3.3.1",
+        "@sanity/client": "^7.20.0",
+        "@sanity/image-url": "^2.1.1",
+        "@tailwindcss/vite": "^4.2.2",
+        "@vercel/speed-insights": "^2.0.0",
+        "astro": "^6.1.4",
+        "astro-icon": "^1.1.5",
+        "sharp": "^0.34.5",
+        "tailwind-merge": "^3.5.0",
+        "tailwindcss": "^4.2.2",
+        "typescript": "^6.0.2"
+    },
+    "devDependencies": {
+        "@kong/eslint-config": "workspace:*",
+        "@kong/prettier-config": "workspace:*",
+        "@kong/tsconfig": "workspace:*",
+        "eslint": "^10.2.0",
+        "prettier": "^3.8.1"
+    }
+}

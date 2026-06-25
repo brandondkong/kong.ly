@@ -1,0 +1,49 @@
+---
+import { sanityClient } from 'sanity:client';
+import type { LinksPage } from '@kong/sanity';
+
+import Base from '../layouts/Base.layout.astro';
+import ProfileHeader from '../components/profile/ProfileHeader.astro';
+import SocialRow from '../components/profile/SocialRow.astro';
+import LinkButtons from '../components/profile/LinkButtons.astro';
+import FeaturedCards from '../components/profile/FeaturedCards.astro';
+import type { FeaturedItem } from '../components/profile/FeaturedCards.astro';
+import { urlFor } from '../lib/sanity';
+import { FALLBACK } from '../lib/constants';
+
+const LINKS_QUERY = `*[_type == "linksPage"][0]{
+    name,
+    tagline,
+    avatar,
+    socials,
+    links,
+    featured
+}`;
+
+const page = await sanityClient.fetch<LinksPage | null>(LINKS_QUERY);
+
+const name = page?.name ?? FALLBACK.name;
+const tagline = page?.tagline ?? FALLBACK.tagline;
+const avatarUrl = page?.avatar
+    ? urlFor(page.avatar).width(224).height(224).url()
+    : null;
+
+const socials = page?.socials?.length ? page.socials : [...FALLBACK.socials];
+const links = page?.links?.length ? page.links : [...FALLBACK.links];
+
+const featured: FeaturedItem[] = (page?.featured ?? []).map((item) => ({
+    title: item.title,
+    description: item.description,
+    url: item.url,
+    imageUrl: urlFor(item.image).width(800).height(450).url(),
+}));
+---
+
+<Base type="profile">
+    <div class="gap-section-gap flex flex-col">
+        <ProfileHeader name={name} tagline={tagline} avatarUrl={avatarUrl} />
+        <SocialRow socials={socials} />
+        <LinkButtons links={links} />
+        <FeaturedCards items={featured} />
+    </div>
+</Base>

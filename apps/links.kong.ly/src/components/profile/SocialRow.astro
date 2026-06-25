@@ -1,0 +1,40 @@
+---
+import { Icon } from 'astro-icon/components';
+import Reveal from '../common/Reveal.astro';
+import type { ProfileSocial } from '@kong/sanity';
+
+interface Props {
+    socials: ProfileSocial[];
+}
+
+const { socials } = Astro.props;
+
+const isExternal = (url: string) => /^https?:/i.test(url);
+---
+
+{
+    socials.length > 0 && (
+        <Reveal
+            as="ul"
+            class="flex flex-wrap items-center justify-center gap-3"
+        >
+            {socials.map((social) => (
+                <li>
+                    <a
+                        href={social.url}
+                        class="border-border text-foreground hover:bg-foreground hover:text-background flex h-11 w-11 items-center justify-center rounded-full border transition-colors"
+                        aria-label={social.label}
+                        {...(isExternal(social.url)
+                            ? { target: '_blank', rel: 'noopener noreferrer' }
+                            : {})}
+                    >
+                        <Icon name={social.icon} size="20" aria-hidden="true" />
+                        {isExternal(social.url) && (
+                            <span class="sr-only">(opens in new tab)</span>
+                        )}
+                    </a>
+                </li>
+            ))}
+        </Reveal>
+    )
+}

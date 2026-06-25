@@ -1,0 +1,51 @@
+---
+import { Icon } from 'astro-icon/components';
+import Reveal from '../common/Reveal.astro';
+import Text from '../common/Text.astro';
+import type { ProfileLink } from '@kong/sanity';
+
+interface Props {
+    links: ProfileLink[];
+}
+
+const { links } = Astro.props;
+
+const isExternal = (url: string) => /^https?:/i.test(url);
+---
+
+{
+    links.length > 0 && (
+        <Reveal class="flex flex-col gap-3">
+            {links.map((link) => (
+                <a
+                    href={link.url}
+                    class="group border-border hover:bg-foreground hover:text-background relative flex items-center justify-center gap-3 border px-6 py-4 transition-colors"
+                    {...(isExternal(link.url)
+                        ? { target: '_blank', rel: 'noopener noreferrer' }
+                        : {})}
+                >
+                    {link.icon && (
+                        <Icon
+                            name={link.icon}
+                            size="20"
+                            class="absolute left-5"
+                            aria-hidden="true"
+                        />
+                    )}
+                    <Text variant="normal" class="font-medium">
+                        {link.label}
+                    </Text>
+                    <Icon
+                        name="arrow-up-right"
+                        size="18"
+                        class="absolute right-5 opacity-0 transition-opacity group-hover:opacity-100"
+                        aria-hidden="true"
+                    />
+                    {isExternal(link.url) && (
+                        <span class="sr-only">(opens in new tab)</span>
+                    )}
+                </a>
+            ))}
+        </Reveal>
+    )
+}

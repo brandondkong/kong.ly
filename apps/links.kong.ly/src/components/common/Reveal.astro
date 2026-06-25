@@ -1,0 +1,60 @@
+---
+interface Props {
+    class?: string;
+    as?: string;
+    delay?: number;
+    distance?: string;
+    duration?: string;
+}
+
+const {
+    class: className,
+    as = 'div',
+    delay,
+    distance = '128px',
+    duration = '2s',
+} = Astro.props;
+const Tag = as as keyof HTMLElementTagNameMap;
+
+const styles = [
+    delay && `--reveal-delay: ${delay}s`,
+    distance && `--reveal-distance: ${distance}`,
+    duration && `--reveal-duration: ${duration}`,
+]
+    .filter(Boolean)
+    .join('; ');
+---
+
+<Tag class={className} data-reveal-fade style={styles || undefined}>
+    <slot />
+</Tag>
+
+<script is:inline>
+    function initRevealFade() {
+        if (window.__revealObserver) window.__revealObserver.disconnect();
+
+        var elements = document.querySelectorAll('[data-reveal-fade]');
+        if (!elements.length) return;
+
+        var observer = new IntersectionObserver(
+            function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { rootMargin: '100px', threshold: 0 },
+        );
+
+        window.__revealObserver = observer;
+
+        elements.forEach(function (el) {
+            observer.observe(el);
+        });
+    }
+
+    initRevealFade();
+    document.addEventListener('astro:page-load', initRevealFade);
+</script>

@@ -1,0 +1,54 @@
+---
+import Text from '../common/Text.astro';
+import Reveal from '../common/Reveal.astro';
+
+interface Props {
+    name: string;
+    tagline?: string;
+    avatarUrl?: string | null;
+}
+
+const { name, tagline, avatarUrl } = Astro.props;
+
+const initials = name
+    .split(/\s+/)
+    .map((word) => word[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+---
+
+<Reveal class="gap-content-gap flex flex-col items-center text-center">
+    <div
+        class="border-border bg-surface h-28 w-28 overflow-hidden rounded-full border"
+    >
+        {
+            avatarUrl ? (
+                <img
+                    src={avatarUrl}
+                    alt={name}
+                    width="224"
+                    height="224"
+                    class="h-full w-full object-cover"
+                />
+            ) : (
+                <div class="flex h-full w-full items-center justify-center">
+                    <Text variant="heading" class="text-muted">
+                        {initials}
+                    </Text>
+                </div>
+            )
+        }
+    </div>
+    <div class="gap-content-gap-sm flex flex-col items-center">
+        <Text variant="title-sm" class="text-3xl md:text-4xl">{name}</Text>
+        {
+            tagline && (
+                <Text variant="normal" class="text-muted max-w-md text-balance">
+                    {tagline}
+                </Text>
+            )
+        }
+    </div>
+</Reveal>
