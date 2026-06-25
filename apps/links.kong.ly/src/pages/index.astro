@@ -41,7 +41,12 @@ const featured: FeaturedItem[] = (page?.featured ?? []).map((item) => ({
 
 <Base type="profile">
     <div class="gap-section-gap flex flex-col">
-        <ProfileHeader name={name} tagline={tagline} avatarUrl={avatarUrl} />
+        <ProfileHeader
+            name={name}
+            tagline={tagline}
+            avatarUrl={avatarUrl}
+            flags={[...FALLBACK.flags]}
+        />
         <SocialRow socials={socials} />
         <LinkButtons links={links} />
         <FeaturedCards items={featured} />

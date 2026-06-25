@@ -1,14 +1,17 @@
 ---
+import { Icon } from 'astro-icon/components';
 import Text from '../common/Text.astro';
 import Reveal from '../common/Reveal.astro';
+import type { Flag } from '../../lib/constants';
 
 interface Props {
     name: string;
     tagline?: string;
     avatarUrl?: string | null;
+    flags?: Flag[];
 }
 
-const { name, tagline, avatarUrl } = Astro.props;
+const { name, tagline, avatarUrl, flags = [] } = Astro.props;
 
 const initials = name
     .split(/\s+/)
@@ -42,7 +45,24 @@ const initials = name
         }
     </div>
     <div class="gap-content-gap-sm flex flex-col items-center">
-        <Text variant="title-sm" class="text-3xl md:text-4xl">{name}</Text>
+        <div class="gap-tight-gap flex items-center">
+            <Text variant="title-sm" class="text-3xl md:text-4xl">{name}</Text>
+            {
+                flags.length > 0 && (
+                    <ul class="flex items-center gap-1.5" aria-label="Heritage">
+                        {flags.map((flag) => (
+                            <li class="flex">
+                                <Icon
+                                    name={`flag:${flag.code}-4x3`}
+                                    title={flag.label}
+                                    class="h-5 w-auto rounded-[2px] ring-1 ring-black/10"
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                )
+            }
+        </div>
         {
             tagline && (
                 <Text variant="normal" class="text-muted max-w-md text-balance">

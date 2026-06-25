@@ -18,10 +18,19 @@ export const SITE = {
  * Rendered when the Sanity `linksPage` document has not been created or a
  * given block is empty, so the page is always presentable.
  */
+export interface Flag {
+    code: string;
+    label: string;
+}
+
 export const FALLBACK = {
     name: 'Brandon Kong',
     tagline:
         'Software developer building auth infrastructure and modern web apps.',
+    flags: [
+        { code: 'cn', label: 'China' },
+        { code: 'pk', label: 'Pakistan' },
+    ] satisfies Flag[],
     socials: [
         { label: 'GitHub', icon: 'brands/github', url: GITHUB_LINK },
         { label: 'LinkedIn', icon: 'brands/linkedin', url: LINKEDIN_LINK },
