@@ -9,11 +9,12 @@ import LinkButtons from '../components/profile/LinkButtons.astro';
 import FeaturedCards from '../components/profile/FeaturedCards.astro';
 import type { FeaturedItem } from '../components/profile/FeaturedCards.astro';
 import { urlFor } from '../lib/sanity';
-import { FALLBACK } from '../lib/constants';
+import { FALLBACK, type Flag } from '../lib/constants';
 
 const LINKS_QUERY = `*[_type == "linksPage"][0]{
     name,
     tagline,
+    flags,
     avatar,
     socials,
     links,
@@ -27,6 +28,14 @@ const tagline = page?.tagline ?? FALLBACK.tagline;
 const avatarUrl = page?.avatar
     ? urlFor(page.avatar).width(224).height(224).url()
     : null;
+
+const regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
+const flags: Flag[] = page?.flags?.length
+    ? page.flags.map((code) => ({
+          code: code.toLowerCase(),
+          label: regionNames.of(code.toUpperCase()) ?? code.toUpperCase(),
+      }))
+    : [...FALLBACK.flags];
 
 const socials = page?.socials?.length ? page.socials : [...FALLBACK.socials];
 const links = page?.links?.length ? page.links : [...FALLBACK.links];
@@ -45,7 +54,7 @@ const featured: FeaturedItem[] = (page?.featured ?? []).map((item) => ({
             name={name}
             tagline={tagline}
             avatarUrl={avatarUrl}
-            flags={[...FALLBACK.flags]}
+            flags={flags}
         />
         <SocialRow socials={socials} />
         <LinkButtons links={links} />
