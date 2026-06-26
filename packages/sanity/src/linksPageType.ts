@@ -32,7 +32,7 @@ export interface LinksPage extends SanityDocument {
 }
 
 const ICON_HELP =
-    'Icon name from the icon set (e.g. brands/github, brands/linkedin, brands/x, brands/instagram, brands/youtube, mail, globe).';
+    'Icon name from the icon set (e.g. brands/github, brands/linkedin, brands/x, brands/instagram, brands/youtube, brands/spotify, mail, globe).';
 
 export const linksPageType = defineType({
     name: 'linksPage',
