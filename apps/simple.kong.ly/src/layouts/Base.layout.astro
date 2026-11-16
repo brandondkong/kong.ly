@@ -1,0 +1,36 @@
+---
+import Font from 'astro/components/Font.astro';
+
+import '../styles/global.css';
+
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+const {
+    title = 'Brandon Kong — Software Developer',
+    description = 'Brandon Kong, a software developer focused on building auth infrastructure and modern web applications.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link
+            rel="canonical"
+            href={new URL(Astro.url.pathname, Astro.site).href}
+        />
+        <meta name="theme-color" content="#ffffff" />
+        <Font cssVariable="--font-inter" />
+        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>

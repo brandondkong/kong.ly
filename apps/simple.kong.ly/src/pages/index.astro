@@ -1,0 +1,219 @@
+---
+import { sanityClient } from 'sanity:client';
+
+import Base from '../layouts/Base.layout.astro';
+
+const MAIN_SITE = 'https://kong.ly';
+
+interface Experience {
+    _id: string;
+    company: { name: string };
+    role: string;
+    startDate: string;
+    endDate: string | null;
+    description: string | null;
+}
+interface Education {
+    _id: string;
+    institution: string;
+    degree: string;
+    startDate: string;
+    endDate: string | null;
+}
+interface Project {
+    _id: string;
+    title: string;
+    slug: { current: string };
+    description: string | null;
+}
+interface Paper {
+    _id: string;
+    title: string;
+    slug: { current: string };
+    venue: string | null;
+}
+interface Post {
+    _id: string;
+    title: string;
+    slug: { current: string };
+    publishedAt: string | null;
+}
+
+const [experiences, educations, projects, papers, posts] = await Promise.all([
+    sanityClient.fetch<Experience[]>(
+        `*[_type == "experience"]|order(order asc){ _id, company->{ name }, role, startDate, endDate, description }`,
+    ),
+    sanityClient.fetch<Education[]>(
+        `*[_type == "education"]|order(order asc){ _id, institution, degree, startDate, endDate }`,
+    ),
+    sanityClient.fetch<Project[]>(
+        `*[_type == "project" && defined(slug.current)]|order(_createdAt desc){ _id, title, slug, description }`,
+    ),
+    sanityClient.fetch<Paper[]>(
+        `*[_type == "paper" && defined(slug.current)]|order(publishedAt desc){ _id, title, slug, venue }`,
+    ),
+    sanityClient.fetch<Post[]>(
+        `*[_type == "post" && defined(slug.current)]|order(publishedAt desc){ _id, title, slug, publishedAt }`,
+    ),
+]);
+
+function month(dateStr: string): string {
+    return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {
+        month: 'short',
+        year: 'numeric',
+    });
+}
+
+function year(dateStr: string): string {
+    return new Date(dateStr + 'T00:00:00').getFullYear().toString();
+}
+---
+
+<Base>
+    <header>
+        <h1>Brandon Kong</h1>
+        <p class="muted">Software developer · Los Angeles</p>
+        <p>
+            I build products from the ground up for startups, niche developer
+            tools, and systems that last.
+        </p>
+        <p>
+            <a href="mailto:kongbrandon0@gmail.com">Email</a> ·
+            <a href="https://github.com/brandondkong">GitHub</a> ·
+            <a href="https://linkedin.com/in/brandondkong">LinkedIn</a> ·
+            <a href={MAIN_SITE}>Full site</a>
+        </p>
+    </header>
+
+    <main>
+        <section>
+            <h2>About</h2>
+            <p>
+                I started coding in 6th grade. My teacher noticed that I'd
+                finished the typing lessons early and set me up on Code Avengers
+                to keep me occupied. Weeks later, I started building websites
+                and games, and I haven't stopped since.
+            </p>
+            <p>
+                That curiosity took me from web development to design
+                engineering to low-level programming to high-performance
+                computing. I graduated from DePaul University in Chicago
+                studying Computer Science in 2026.
+            </p>
+            <p>
+                Today, I'm a founding engineer at LUX VITAE where I lead the
+                team of engineers building ANTIK, the elevated interface for
+                personal computing. I'm based in Los&nbsp;Angeles.
+            </p>
+        </section>
+
+        {
+            experiences.length > 0 && (
+                <section>
+                    <h2>Experience</h2>
+                    <ul>
+                        {experiences.map((e) => (
+                            <li>
+                                <strong>{e.company.name}</strong>
+                                <div class="muted">
+                                    {e.role} · {month(e.startDate)} —{' '}
+                                    {e.endDate ? month(e.endDate) : 'Present'}
+                                </div>
+                                {e.description && <p>{e.description}</p>}
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            )
+        }
+
+        {
+            educations.length > 0 && (
+                <section>
+                    <h2>Education</h2>
+                    <ul>
+                        {educations.map((e) => (
+                            <li>
+                                <strong>{e.institution}</strong>
+                                <div class="muted">
+                                    {e.degree} · {month(e.startDate)} —{' '}
+                                    {e.endDate ? month(e.endDate) : 'Present'}
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            )
+        }
+
+        {
+            projects.length > 0 && (
+                <section>
+                    <h2>Projects</h2>
+                    <ul>
+                        {projects.map((p) => (
+                            <li>
+                                <a
+                                    href={`${MAIN_SITE}/works/${p.slug.current}`}
+                                >
+                                    {p.title}
+                                </a>
+                                {p.description && (
+                                    <span class="muted">
+                                        {' '}
+                                        — {p.description}
+                                    </span>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            )
+        }
+
+        {
+            papers.length > 0 && (
+                <section>
+                    <h2>Papers</h2>
+                    <ul>
+                        {papers.map((p) => (
+                            <li>
+                                <a
+                                    href={`${MAIN_SITE}/papers/${p.slug.current}`}
+                                >
+                                    {p.title}
+                                </a>
+                                {p.venue && (
+                                    <span class="muted"> — {p.venue}</span>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            )
+        }
+
+        {
+            posts.length > 0 && (
+                <section>
+                    <h2>Writing</h2>
+                    <ul>
+                        {posts.map((p) => (
+                            <li>
+                                <a href={`${MAIN_SITE}/blog/${p.slug.current}`}>
+                                    {p.title}
+                                </a>
+                                {p.publishedAt && (
+                                    <span class="muted">
+                                        {' '}
+                                        ({year(p.publishedAt.slice(0, 10))})
+                                    </span>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            )
+        }
+    </main>
+</Base>

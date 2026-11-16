@@ -11,6 +11,8 @@
         "games:build": "bun run --filter games.kong.ly build",
         "links:dev": "bun run --filter links.kong.ly dev",
         "links:build": "bun run --filter links.kong.ly build",
+        "simple:dev": "bun run --filter simple.kong.ly dev",
+        "simple:build": "bun run --filter simple.kong.ly build",
         "lint": "bun run --filter '*' lint",
         "format": "bun run --filter '*' format",
         "format:check": "bun run --filter '*' format:check"
